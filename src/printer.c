@@ -68,13 +68,13 @@ int bufferAdd( char c )
 
 int bufferAddStr( char *s )
 {
-	if ( !s ) return 0;
+    if ( !s ) return 0;
 
-	int len = strlen( s );
+    int len = strlen( s );
     if ( s && bufferLen+len<BUFFER_MAX )
     {
-		memcpy( &buffer[bufferLen], s, len );
-		bufferLen += len;
+        memcpy( &buffer[bufferLen], s, len );
+        bufferLen += len;
         buffer[ bufferLen ] = 0;
         return len;
     }
@@ -85,7 +85,7 @@ BOOL UpdateFont(PrintParam_t *P);
 void bufferFlush(PrintParam_t *P)
 {
     int X = P->EFontOld.x + P->EFontOld.ofsX;
-    int Y = P->EFontOld.y + P->EFontOld.ofsY + P->EFontOld.dY/2;	
+    int Y = P->EFontOld.y + P->EFontOld.ofsY + P->EFontOld.dY/2;    
 
     // сделаем так, тосимвол '_' не может быть UnderLine..., зачем? :)
     // специальная, проверка для символа '_'
@@ -138,10 +138,10 @@ DWORD GetBorderWidth(PrintParam_t *P, PaperSide_t S )
     {
         case sTop:
         case sBotton:
-			B = ( S == sTop ) ? P->Paper.BorderTop : P->Paper.BorderBotton;
+            B = ( S == sTop ) ? P->Paper.BorderTop : P->Paper.BorderBotton;
 
             if ( B == 0 ) 
-				B = DEF_FAST_BORDER_HIGH; 
+                B = DEF_FAST_BORDER_HIGH; 
 
             UnprintableArea = (float(OfsY)/float(LOGY)*INCH);
             if ( B < UnprintableArea )
@@ -153,9 +153,9 @@ DWORD GetBorderWidth(PrintParam_t *P, PaperSide_t S )
 
         case sLeft:
         case sRight:
-			B = ( S == sLeft ) ? P->Paper.BorderLeft : P->Paper.BorderRight;
-			if ( B == 0 )
-				B = DEF_FAST_BORDER_WIDTH; 
+            B = ( S == sLeft ) ? P->Paper.BorderLeft : P->Paper.BorderRight;
+            if ( B == 0 )
+                B = DEF_FAST_BORDER_WIDTH; 
 
             UnprintableArea = (float(OfsX)/float(LOGX)*INCH);
             if ( B < UnprintableArea )
@@ -186,7 +186,7 @@ DWORD GetPaperFreeHigh(PrintParam_t *P)
     if ( !P->Paper.H && P->Options.EpsonFastPrint )
         FreeHigh = (static_cast<DWORD>((float)29.7*(float)_METRIC( 1000 )))*P->Options.AskCorrectPaper;
     else // ниже для всей нерулонной бумаги...
-    	FreeHigh = P->Paper.H-GetBorderWidth(P, sTop)-GetBorderWidth(P, sBotton);
+        FreeHigh = P->Paper.H-GetBorderWidth(P, sTop)-GetBorderWidth(P, sBotton);
 
     if (DBG_MODE) LogAddLine("GetPaperFreeHigh: Paper.H=%i Options.EpsonFastPrint=%i FreeHigh: %d ",P->Paper.H,P->Options.EpsonFastPrint,FreeHigh);
 
@@ -202,10 +202,10 @@ DWORD GetPaperFreeWidth(PrintParam_t *P )
     { 
         DWORD FreeWidth = P->Paper.W - GetBorderWidth( P, sLeft  ) - GetBorderWidth( P, sRight );
         if (DBG_MODE) LogAddLine("GetPaperFreeWidth: Paper.W=%i FreeWidth: %d ", P->Paper.W, FreeWidth);
-		return FreeWidth;
+        return FreeWidth;
     }
-	else
-		return 0;
+    else
+        return 0;
 }
 
 /**
@@ -213,16 +213,16 @@ DWORD GetPaperFreeWidth(PrintParam_t *P )
 */
 DWORD StartPrintFast(PrintParam_t *P, char *DocName, char *PrintToFile )
 {
-	LogAddLine( "---- StartPrintFast: docname={%s} prn2file={%s}", DocName, PrintToFile );
-	LogAddLine( "       Printer Info: prnname={%s} portname={%s}", P->PrinterForPrint->pPrinterName, P->PrinterForPrint->pPortName );
+    LogAddLine( "---- StartPrintFast: docname={%s} prn2file={%s}", DocName, PrintToFile );
+    LogAddLine( "       Printer Info: prnname={%s} portname={%s}", P->PrinterForPrint->pPrinterName, P->PrinterForPrint->pPortName );
 
-	DWORD err=0;
-	if ( err == 0 )
-	{
-		return err;
-	}
-	LogAddLine( "---- StartPrintFast: StartDocPrinter %s", (err!=0)?"OK":"error" );
-	return err;
+    DWORD err=0;
+    if ( err == 0 )
+    {
+        return err;
+    }
+    LogAddLine( "---- StartPrintFast: StartDocPrinter %s", (err!=0)?"OK":"error" );
+    return err;
 }
 
 /**
@@ -232,7 +232,7 @@ DWORD StartPrintWindows(PrintParam_t *P, char *DocName, char *PrintToFile )
 {
     int Height,Width;
     
-	if (DBG_MODE) LogAddLine( "---- StartPrintWindows: docname={%s} prn2file={%s}", DocName, PrintToFile );
+    if (DBG_MODE) LogAddLine( "---- StartPrintWindows: docname={%s} prn2file={%s}", DocName, PrintToFile );
     
     //--- установим бумажка...
     //P.PaperType ==
@@ -247,28 +247,28 @@ DWORD StartPrintWindows(PrintParam_t *P, char *DocName, char *PrintToFile )
             break;
 
         case 1:
-			if (DBG_MODE) LogAddLine( "     paperType: A4 (portrait)" );
+            if (DBG_MODE) LogAddLine( "     paperType: A4 (portrait)" );
             break;
 
         case 2:
-			if (DBG_MODE) LogAddLine( "     paperType: A4 (landscape)" );
+            if (DBG_MODE) LogAddLine( "     paperType: A4 (landscape)" );
             break;
 
         case 3:
-			if (DBG_MODE) LogAddLine( "     paperType: A3" );
+            if (DBG_MODE) LogAddLine( "     paperType: A3" );
             break;
     }
 
     Height = P->Paper.H;
     Width = P->Paper.W;
     
-	//--- установим кол-во копий...
+    //--- установим кол-во копий...
 
-	//--- выясним ориентацию для печати Portrait or Landscape???
-	if ( P->Paper.Orientation )
-	{
-		if (DBG_MODE) LogAddLine( "     Set orientation: (%s)", ( P->Paper.Orientation == 1 ) ? "portrait":"landscape" );
-	}
+    //--- выясним ориентацию для печати Portrait or Landscape???
+    if ( P->Paper.Orientation )
+    {
+        if (DBG_MODE) LogAddLine( "     Set orientation: (%s)", ( P->Paper.Orientation == 1 ) ? "portrait":"landscape" );
+    }
 
     //--- установим изменения...
 
@@ -280,10 +280,10 @@ DWORD StartPrintWindows(PrintParam_t *P, char *DocName, char *PrintToFile )
     if (DBG_MODE) LogAddLine("Paper: %i x %i\tPrint file: %s", Width, Height, filename);
     free(filename);
     
-	if ( P->CairoSurface == NULL )
+    if ( P->CairoSurface == NULL )
     {
-		if (DBG_MODE) LogAddLine( "---- StartPrintWindows: error (cant create dc)" );
-		return 0;
+        if (DBG_MODE) LogAddLine( "---- StartPrintWindows: error (cant create dc)" );
+        return 0;
     }
 
     //--- заполним структуру для спулера...
@@ -299,10 +299,10 @@ DWORD StartPrintWindows(PrintParam_t *P, char *DocName, char *PrintToFile )
     P->Paper.ofsY = max( oY, 1.0 ); 
     if (DBG_MODE) LogAddLine("--- Paper\t BorderLeft: %i BorderTop: %i\tofsX: %i ofsY: %i",P->Paper.BorderLeft,P->Paper.BorderTop,P->Paper.ofsX,P->Paper.ofsY);
     
-	int err = 1;
-	if (DBG_MODE) LogAddLine( "---- StartPrintWindows: StartDoc %s", (err>0)?"OK":"error" );
+    int err = 1;
+    if (DBG_MODE) LogAddLine( "---- StartPrintWindows: StartDoc %s", (err>0)?"OK":"error" );
 
-	return err;
+    return err;
 }
 
 static void *oldDC;
@@ -329,7 +329,7 @@ BOOL GetLOGXY(PrintParam_t *P)
     else
        ;
 
-	if ( !hdc )
+    if ( !hdc )
         return FALSE;
 
     LOGX=600;
@@ -343,10 +343,10 @@ BOOL GetLOGXY(PrintParam_t *P)
 */
 BOOL StartPrint(PrintParam_t *P)
 {
-	DWORD Error = 0;
+    DWORD Error = 0;
 
     totalFontCache=0;
-	P->pDevMode   = NULL;
+    P->pDevMode   = NULL;
     P->PDC        = NULL;
 
     char prn2file[1024]; prn2file[0]=0;
@@ -363,21 +363,21 @@ BOOL StartPrint(PrintParam_t *P)
 
     //--- установим обработчик ошибок для принтера
 
-	//--- установим собственные шрифты если нужны...
+    //--- установим собственные шрифты если нужны...
 
     P->AppendToCurPage           = FALSE;
     P->AppendNextBlockToCurPage  = FALSE;
-	P->BlkCur		  = P->Doc;
-	P->CurPageForPrint = 0;
+    P->BlkCur         = P->Doc;
+    P->CurPageForPrint = 0;
 
-	//--- Подготовим бумагу к печати
+    //--- Подготовим бумагу к печати
     //    для печати доступна вся страница
-	P->Paper.FreeHigh = GetPaperFreeHigh( P );	
+    P->Paper.FreeHigh = GetPaperFreeHigh( P );  
 
     // установим шрифт по умолчанию, 1-ПИКА
-   	InitDefEpsonFont( P, 1 );
+    InitDefEpsonFont( P, 1 );
 
-	return Error;
+    return Error;
 }
 
 /**
@@ -385,24 +385,24 @@ BOOL StartPrint(PrintParam_t *P)
 */
 BOOL EndPrint(PrintParam_t *P )
 {
-	// восстановим фонт по умолчанию...
+    // восстановим фонт по умолчанию...
 
     // удалим все фонты...
     for (int i=0; i<totalFontCache; i++)
         ;
     totalFontCache=0;
-	
+    
     BOOL ret = 0;
     if ( P->PrintCanceled )
         ;
 
-	// удалим ресурсы: фонты...
+    // удалим ресурсы: фонты...
 
 
-	if ( P->pDevMode )
-		delete P->pDevMode;
+    if ( P->pDevMode )
+        delete P->pDevMode;
 
-	// удалить контекст для принтера...
+    // удалить контекст для принтера...
 
     if (P->CairoSurface)
     {
@@ -431,7 +431,7 @@ BOOL EndPrint(PrintParam_t *P )
         free(filename);
      }
 
-	return ret;
+    return ret;
 }
 
 /**
@@ -462,7 +462,11 @@ BOOL BeginPage(PrintParam_t *P, bool NeedInit )
         if ( P->BlkCur->HaveActions & aLANDSCAPE_ORIENTATION)
             SetOrientationPage(P, LANDSCAPE_ORIENTATION_CODE);
         //if ( P->BlkCur->HaveActions & aFIT_TO_WIDTH)
-        //    SetFitToWidthPage(P);
+        //    SetFitToWidthPage(P);        
+    }
+    else
+    {
+        if (DBG_MODE) LogAddLine("Current block is NULL");
     }
 
     if ( P->isPreview )
@@ -476,7 +480,7 @@ BOOL BeginPage(PrintParam_t *P, bool NeedInit )
     }
 
     BOOL R = FALSE;
-	if ( P->Options.EpsonFastPrint )
+    if ( P->Options.EpsonFastPrint )
     {
         if ( !DefInited || NeedInit )
         {
@@ -484,10 +488,10 @@ BOOL BeginPage(PrintParam_t *P, bool NeedInit )
             DefInited = TRUE;
         }
     }
-	else
-	{
-		SetMapModeForPrinter( P );
-	}
+    else
+    {
+        SetMapModeForPrinter( P );
+    }
 
     if (DBG_MODE) LogAddLine("Result: %i\tBeginPage function STOP",R);
     return R;
@@ -500,18 +504,18 @@ BOOL EndPage(PrintParam_t *P, bool isLastPage )
 {
     BOOL Cancel = 0;
     int isEndPage = -1;
-	if ( P->Options.EpsonFastPrint )
+    if ( P->Options.EpsonFastPrint )
     {
-       	//--- конец страницы, но НЕ РУЛОНА для епсона...
+        //--- конец страницы, но НЕ РУЛОНА для епсона...
         if ( P->Paper.H )
         {
-			if ( !isLastPage || ( isLastPage && P->Options.EjectLastSheet ) )
-				PrintChar( P, FORMFEED, 1 );
+            if ( !isLastPage || ( isLastPage && P->Options.EjectLastSheet ) )
+                PrintChar( P, FORMFEED, 1 );
 
         }
 
     }
-	else
+    else
     if ( P->isPreview )
     {
         P->PDC = oldDC;
@@ -532,24 +536,24 @@ BOOL EndPage(PrintParam_t *P, bool isLastPage )
 */
 BOOL SetMapModeForPrinter(PrintParam_t *P)
 {
-	//--- для быстрой печати не надо, то есть всё установленно...
-	if ( P->Options.EpsonFastPrint )
-		return TRUE;
+    //--- для быстрой печати не надо, то есть всё установленно...
+    if ( P->Options.EpsonFastPrint )
+        return TRUE;
 
     //--- посчитаем ширину в лог. единицах f(x) = кол-воТочекНаДюйм * ( lenInCm / 2540 ); 2540 == 1 inch
 
     //--- установим свой режим отображения...
 
-	//--- установка размера окна логического
+    //--- установка размера окна логического
 
-	// установка размера окна физического...
+    // установка размера окна физического...
 
-	//--- установка начало координат
-	// на логическом уровне
+    //--- установка начало координат
+    // на логическом уровне
 
-	// на физическом уровне
+    // на физическом уровне
 
-	// установим прозрачный фон
+    // установим прозрачный фон
 
     return TRUE;
 }
@@ -559,13 +563,13 @@ BOOL SetMapModeForPrinter(PrintParam_t *P)
 */
 BOOL SelectFont( PrintParam_t *P, int H, int W, int Weight, DWORD Italic)
 {
-	char FamilyName[1024];
+    char FamilyName[1024];
 
     double font_size=H-_METRIC(80);
     
-	strcpy( FamilyName, "Courier New" );
-	if ( P->Options.UseOwnShrift ) 
-		strcpy( FamilyName, "Iourier New" );	// использовать собственный шрифт для печати...
+    strcpy( FamilyName, "Courier New" );
+    if ( P->Options.UseOwnShrift ) 
+        strcpy( FamilyName, "Iourier New" );    // использовать собственный шрифт для печати...
     if ( P->EFont.Condensed )
     {
         font_size=H; //-_METRIC(16);
@@ -590,9 +594,9 @@ cache_t *CacheCreateFont( PrintParam_t *P, int H, int W, int Weight, DWORD Itali
     for ( int i=0; i<totalFontCache;i++ )
     {
         if ( FontCache[i].H==H && 
-			 FontCache[i].W==W &&
+             FontCache[i].W==W &&
              FontCache[i].Weight==Weight && 
-			 FontCache[i].Italic==Italic )
+             FontCache[i].Italic==Italic )
         {
             return &FontCache[i];
         }
@@ -600,8 +604,8 @@ cache_t *CacheCreateFont( PrintParam_t *P, int H, int W, int Weight, DWORD Itali
 
     if ( totalFontCache+1<MAX_CACHE )
     {
-        FontCache[totalFontCache].H		 = H;
-        FontCache[totalFontCache].W		 = W;
+        FontCache[totalFontCache].H      = H;
+        FontCache[totalFontCache].W      = W;
         FontCache[totalFontCache].Weight = Weight;
         FontCache[totalFontCache].Italic = Italic;
         totalFontCache++;
@@ -643,7 +647,7 @@ BOOL UpdateFont(PrintParam_t *P )
     
     P->DefFont = CacheCreateFont(P,P->EFont.H,P->EFont.W,P->EFont.Weight,P->EFont.Italic);
         
-	if ( P->OldFont == NULL )
+    if ( P->OldFont == NULL )
         P->OldFont = P->DefFont;
     result=SelectFont(P,P->DefFont->H,P->DefFont->W,P->DefFont->Weight,P->DefFont->Italic);
     
@@ -657,18 +661,18 @@ BOOL UpdateFont(PrintParam_t *P )
 */
 void PrintCharEpson(PrintParam_t *P, char *s, int count )
 {
-	if ( count <= 0 )
-		return;
+    if ( count <= 0 )
+        return;
 
-	char *d=new char[count];
-	if ( d == NULL )
-		return;
+    char *d=new char[count];
+    if ( d == NULL )
+        return;
 
-	memcpy( d, s, count*sizeof(char));
+    memcpy( d, s, count*sizeof(char));
 
 
-	DWORD Written;
-	if ( d ) delete []d;
+    DWORD Written;
+    if ( d ) delete []d;
 }
 
 /**
@@ -676,10 +680,10 @@ void PrintCharEpson(PrintParam_t *P, char *s, int count )
 */
 void PrintCharWin(PrintParam_t *P, char *s, int count )
 {
-	if ( count<=0 )
-		return;
+    if ( count<=0 )
+        return;
 
-	// конверт из DOS->WIN кодировку...
+    // конверт из DOS->WIN кодировку...
     char *prn_s=cp866_to_utf8(s);
 
     //--- символ '_' отдельная группа...
@@ -701,7 +705,7 @@ void PrintCharWin(PrintParam_t *P, char *s, int count )
           ( bufferLen>0 && buffer[0] != '-' && prn_s[0] == '-' ) );
 
     // обновим фонт если надо...
-	if ( P->FontNeedUpdate || isSpecialChars || isSpace || isMinus )
+    if ( P->FontNeedUpdate || isSpecialChars || isSpace || isMinus )
     {
         bufferFlush( P );
 
@@ -711,7 +715,7 @@ void PrintCharWin(PrintParam_t *P, char *s, int count )
         memmove( &P->EFontOld, &P->EFont, sizeof( P->EFont ) );
     }
 
-	bufferAdd( s[0] );
+    bufferAdd( s[0] );
     free(prn_s);
 }
 
@@ -726,10 +730,10 @@ void PrintChar(PrintParam_t *P, char *s, int count )
     if ( P->isPrinting )
     {
         // для епсона(быстрая печать) пуляем всё как есть...
-	    if ( P->Options.EpsonFastPrint )
-			PrintCharEpson( P, s, count );
-	    else // маленько покэшируем...
-			PrintCharWin( P, s, count );
+        if ( P->Options.EpsonFastPrint )
+            PrintCharEpson( P, s, count );
+        else // маленько покэшируем...
+            PrintCharWin( P, s, count );
     } // if ( isPrinting )....  memory
 
     P->EFont.x += ( P->EFont.dX*count);
@@ -742,13 +746,13 @@ void PrintChar(PrintParam_t *P, char *s, int count )
 */
 void PrintNewLine(PrintParam_t *P )
 {
-	DWORD intr = P->EFont.Interval;
+    DWORD intr = P->EFont.Interval;
 
     if ( P->Paper.FreeHigh > intr ) 
         P->Paper.FreeHigh -= intr;
 
-	P->EFont.y += intr;
-	P->EFont.x = 0;
+    P->EFont.y += intr;
+    P->EFont.x = 0;
 
     if (DBG_MODE) LogAddLine("PrintNewLine:\tInterval: %i",intr);
     
@@ -758,11 +762,11 @@ void PrintNewLine(PrintParam_t *P )
 
     memmove( &P->EFontOld, &P->EFont, sizeof( P->EFont ) );
 
-	if ( P->Options.EpsonFastPrint )
-	{
-		char CRLF[] = "\r";
-		PrintChar( P, CRLF, 2 );
-	}
+    if ( P->Options.EpsonFastPrint )
+    {
+        char CRLF[] = "\r";
+        PrintChar( P, CRLF, 2 );
+    }
 
 }
 
@@ -772,17 +776,17 @@ void PrintNewLine(PrintParam_t *P )
 */
 int LenPureText(PrintParam_t *P, TextFont_t *F, DWORD p )
 {
-	int lenPureText = 0;
-	// найти фонт в текущей позиции...
-	while ( F && F->Pos < p ) F = F->Next;
+    int lenPureText = 0;
+    // найти фонт в текущей позиции...
+    while ( F && F->Pos < p ) F = F->Next;
 
-	while ( F && F->Pos == p )
-		F = F->Next;
+    while ( F && F->Pos == p )
+        F = F->Next;
 
-	if ( F && F->Pos > p )
-		lenPureText = F->Pos - p - 1;
+    if ( F && F->Pos > p )
+        lenPureText = F->Pos - p - 1;
 
-	return lenPureText;
+    return lenPureText;
 }
 
 /**
@@ -790,23 +794,23 @@ int LenPureText(PrintParam_t *P, TextFont_t *F, DWORD p )
 */
 int SetFont(PrintParam_t *P, TextFont_t *F, DWORD p )
 {
-	int FontSet = 0;
-	// найти фонт в текущей позиции...
-	while ( F && F->Pos < p ) F = F->Next;
+    int FontSet = 0;
+    // найти фонт в текущей позиции...
+    while ( F && F->Pos < p ) F = F->Next;
 
-	// ни пуха, ни пера... только фонт -)
-	while ( F && F->Pos == p )
-	{
-		FontSet++;
-		AnalyzeFont( P, F, 0 );
+    // ни пуха, ни пера... только фонт -)
+    while ( F && F->Pos == p )
+    {
+        FontSet++;
+        AnalyzeFont( P, F, 0 );
 
         // печатает Epson шрифт сразу...
-		if ( P->isPrinting && P->Options.EpsonFastPrint && F->EpsonData )	
-		    PrintChar( P, F->EpsonData, F->EpsonDataLen );
-		F = F->Next;
-	}
+        if ( P->isPrinting && P->Options.EpsonFastPrint && F->EpsonData )   
+            PrintChar( P, F->EpsonData, F->EpsonDataLen );
+        F = F->Next;
+    }
 
-	return FontSet;
+    return FontSet;
 }
 
 /**
@@ -816,22 +820,22 @@ BOOL PagePrint(PrintParam_t *P, bool isLastPage, bool NeedInit )
 {
     if (DBG_MODE) LogAddLine("PagePrint function START LineInPage: %i NumParts: %i", P->Paper.LineInPage, P->NumParts);
     
-	DWORD curLine = 0;
-	DWORD totalLine = ( P->Paper.LineInPage * P->NumParts );
+    DWORD curLine = 0;
+    DWORD totalLine = ( P->Paper.LineInPage * P->NumParts );
 
     // текущая позиция печати в строке...
-	DWORD Start = 0;
-	bool HaveData = (P->isPrinting>0);
-	
+    DWORD Start = 0;
+    bool HaveData = (P->isPrinting>0);
+    
     // цикл для печати по частям...
-	for ( WORD i = 0; i < P->NumParts; i++ )
-	{
-		//-- печатать ли страницу?
-		P->isPrinting = ( HaveData && P->PagesForPrint[P->CurPage++]>0 ) ? TRUE : FALSE	;
+    for ( WORD i = 0; i < P->NumParts; i++ )
+    {
+        //-- печатать ли страницу?
+        P->isPrinting = ( HaveData && P->PagesForPrint[P->CurPage++]>0 ) ? TRUE : FALSE ;
         if (DBG_MODE) LogAddLine("PagePrint\tHaveData: %i\t isPrinting: %i",HaveData,P->isPrinting);
 
         //-- инициализируем сообщение в диалоги печати...
-	    char title[ 100 ];
+        char title[ 100 ];
         char *s = NULL;
         if ( P->NumParts > 1 )
             s = GetStr( IDS_PAGEPRINTPART );
@@ -842,40 +846,41 @@ BOOL PagePrint(PrintParam_t *P, bool isLastPage, bool NeedInit )
             s = GetStr( ( P->NumParts > 1 ) ? IDS_PAGEPARTSKIP: IDS_PAGESKIP );
 
         P->CurPartForPrint = i+1;
-	    sprintf( title, s, P->CurPageForPrint, P->CurPartForPrint );
+        sprintf( title, s, P->CurPageForPrint, P->CurPartForPrint );
 
-		//--
+        //--
         if ( P->isPrinting )
-		{
-			// добавить текущию печатаемую часть к предыдущей ?
-			if ( !P->AppendToCurPage )
-			{
-				BeginPage( P, NeedInit ); // не инициализировать
+        {
+            // добавить текущию печатаемую часть к предыдущей ?
+            if ( !P->AppendToCurPage )
+            {
+                BeginPage( P, NeedInit ); // не инициализировать
+                if (DBG_MODE) LogAddLine("Is last page: %i\tNeed init %i", isLastPage, NeedInit);          
 
-				// обнулим координату печати...
-				P->EFont.x = P->EFont.y = 0;
-				P->MaxPageForPrint++;
-			}
+                // обнулим координату печати...
+                P->EFont.x = P->EFont.y = 0;
+                P->MaxPageForPrint++;
+            }
         
-			// преобразование и рисование линий, если не включен быстрый режим печати...
-			if ( !P->Options.EpsonFastPrint )
-				ConvTableToLines( P, i );
-		}
+            // преобразование и рисование линий, если не включен быстрый режим печати...
+            if ( !P->Options.EpsonFastPrint )
+                ConvTableToLines( P, i );
+        }
 
         // цикл по всем линиям страницы...
-		TextLine_t *L = P->Page;
-		while ( L )
-		{
+        TextLine_t *L = P->Page;
+        while ( L )
+        {
             // обработчик ESC и кнопка "Отмена"
             BOOL abort = FALSE;
             if ( abort )
             {
                 P->PrintCanceled = TRUE;
-				break;
+                break;
             }
 
             // пропустить линию..
-			if ( L->Attr & aSKIP )
+            if ( L->Attr & aSKIP )
             {
                 L = L->Next;
                 continue;
@@ -890,14 +895,14 @@ BOOL PagePrint(PrintParam_t *P, bool isLastPage, bool NeedInit )
                     partLen = ( L->Len - Start );
 
             // у линии атрибу для печати?
-			if ( L->Attr & ( aPRINT | aPRINT_ONCE ) )
-			{
+            if ( L->Attr & ( aPRINT | aPRINT_ONCE ) )
+            {
                 // проверка на линию для замены на подобранный шрифт...
                 if ( L->Attr & aAUTOMODE ) 
                 {
                     char AutoShrift = InitDefEpsonFont(P,0);
                     if ( P->Options.EpsonFastPrint )
-						PrintChar( P, DEF_FONTS[ AutoShrift ], strlen( DEF_FONTS[ AutoShrift ] ) );
+                        PrintChar( P, DEF_FONTS[ AutoShrift ], strlen( DEF_FONTS[ AutoShrift ] ) );
                 }
 
                 // заменим здесь символ перевода страницы на пробел, напечатаем сами в EndPage()
@@ -907,43 +912,43 @@ BOOL PagePrint(PrintParam_t *P, bool isLastPage, bool NeedInit )
                     if ( FF ) *FF = ' ';
                 }
 
-    			for ( DWORD p = 0; p < partLen; p++ )
-				{
-				    // эмуляция установки ESC шрифтов под WindЫЫЫ :)
+                for ( DWORD p = 0; p < partLen; p++ )
+                {
+                    // эмуляция установки ESC шрифтов под WindЫЫЫ :)
                     SetFont( P, L->Font, Start + p );
-	
-	    		    // печать символа в строчке...
-					char str[ 2 ] = { L->Data[ Start + p ], 0 };
+    
+                    // печать символа в строчке...
+                    char str[ 2 ] = { L->Data[ Start + p ], 0 };
 
-					PrintChar( P, str, 1 ); // was len
-				} // for
+                    PrintChar( P, str, 1 ); // was len
+                } // for
 
-				// учитываем фонты в конце линии...
+                // учитываем фонты в конце линии...
                 SetFont( P, L->Font, Start + partLen );
 
                 // сбрасываем буффер...
                 bufferFlush( P );
 
                 // перевод строки...
-				PrintNewLine( P );
-			} // if 
+                PrintNewLine( P );
+            } // if 
 
             // следующая линия...
-			L = L->Next;
-		} // while ( L )
+            L = L->Next;
+        } // while ( L )
 
-        if ( P->PrintCanceled )	// прервали печать?
-            break;				// да...
+        if ( P->PrintCanceled ) // прервали печать?
+            break;              // да...
 
         // проверим сколько места осталось на странице....
         if ( P->Paper.H )
         {
-            int usedHigh = P->Paper.H - P->Paper.FreeHigh;	// сколько использованно бумаги
+            int usedHigh = P->Paper.H - P->Paper.FreeHigh;  // сколько использованно бумаги
 
             // если войдёт ещё часть...то спросит куда печатать....
             if ( ( usedHigh > 0 && usedHigh <= P->Paper.FreeHigh && 
-				   i+1<P->NumParts && P->PagesForPrint[P->CurPage]>0 ) 
-				 || P->AppendNextBlockToCurPage )
+                   i+1<P->NumParts && P->PagesForPrint[P->CurPage]>0 ) 
+                 || P->AppendNextBlockToCurPage )
             {
                 // ВНИМАНИЕ! Если здесь поставить P->AppendToCurPage = TRUE;
                 // то по ~~ не будет переводить вывод на следующую страницу
@@ -960,13 +965,13 @@ BOOL PagePrint(PrintParam_t *P, bool isLastPage, bool NeedInit )
                 break;
         }
 
-		// на следующию часть...
-		Start += P->Parts[ i ];
-	}
+        // на следующию часть...
+        Start += P->Parts[ i ];
+    }
 
     if (DBG_MODE) LogAddLine("PagePrint function STOP");
     
-	return !P->PrintCanceled;
+    return !P->PrintCanceled;
 }
 
 /**
@@ -977,47 +982,47 @@ BOOL PrintDoc(PrintParam_t *P )
     if (DBG_MODE) LogAddLine("PrintDoc function START");
     
     WORD DupMode = 0; // специальный режим '&n' n==0 оменить
-	BOOL errInLoop = FALSE;
+    BOOL errInLoop = FALSE;
 
-	//--- создадим контекст. установим всё что надо для печати
-	if ( !StartPrint( P ) )
+    //--- создадим контекст. установим всё что надо для печати
+    if ( !StartPrint( P ) )
     {
         return TRUE;
     }
 
-	//--- основной цикл
-	while ( !errInLoop && !P->PrintCanceled )
-	{
-		bool isLastPage = false;	// если true - печатается последняя страница
-		bool NeedInit = false;		// если true - инициализировать установки по умолчанию...
+    //--- основной цикл
+    while ( !errInLoop && !P->PrintCanceled )
+    {
+        bool isLastPage = false;    // если true - печатается последняя страница
+        bool NeedInit = false;      // если true - инициализировать установки по умолчанию...
         
         if ( !BuildPageForPrint( P, DupMode, isLastPage, NeedInit ) )
             break;
 
-		P->CurPageForPrint++;
+        P->CurPageForPrint++;
 
- 		PageCopy( P, DupMode );     // скопируем страницу...теперь работаем только с P.Page...
-		DoNumeration( P );          // заменим '#' на текущий номер страницы...
-		DoDateTime( P );            // заменим '\' на текущию дату...
-		DoAutoShrift( P, DupMode ); // '^' подберём шрифт...
+        PageCopy( P, DupMode );     // скопируем страницу...теперь работаем только с P.Page...
+        DoNumeration( P );          // заменим '#' на текущий номер страницы...
+        DoDateTime( P );            // заменим '\' на текущию дату...
+        DoAutoShrift( P, DupMode ); // '^' подберём шрифт...
 
-		if ( DupMode )
-		{
-			DoDuplicate( P, DupMode );  // '&' дублирование, размножим страничку...
-			if ( FALSE )		        // отменить?
-				DupMode = 0;			// да...
-		}
-		else
+        if ( DupMode )
         {
-		    DoSumColumns( P );      // '+' посчитать сумму в колонках...
-    	    DoRepeatName( P );      // '!' заменить одинаковые имена в колонках...
+            DoDuplicate( P, DupMode );  // '&' дублирование, размножим страничку...
+            if ( FALSE )                // отменить?
+                DupMode = 0;            // да...
+        }
+        else
+        {
+            DoSumColumns( P );      // '+' посчитать сумму в колонках...
+            DoRepeatName( P );      // '!' заменить одинаковые имена в колонках...
         }
 
-		//-- добавим блок подписи если нужен...
-		SignCopy( P );
+        //-- добавим блок подписи если нужен...
+        SignCopy( P );
 
-		//-- '}' повторим части... 
-		if ( !DoPart( P ) ) 
+        //-- '}' повторим части... 
+        if ( !DoPart( P ) ) 
         {
             sayError( IDS_ERROR_REPORT_TOO_WIDE );
             errInLoop = TRUE;
@@ -1025,15 +1030,15 @@ BOOL PrintDoc(PrintParam_t *P )
             break;
         }
 
-		//-- заменим '@', '~', '~~', '&0' 
+        //-- заменим '@', '~', '~~', '&0' 
         ChangeServiceChars( P ); 
 
         //--
-		// если после шапки только пустые линии 
+        // если после шапки только пустые линии 
         // _И_ первая печатаемая страницы равна текущей => не печатать...
         P->isPrinting = HaveDataInPage( P );
 
-		//-- Печать страницы...
+        //-- Печать страницы...
         if ( PagePrint( P, isLastPage, NeedInit ) )
         {
             //Перевод на новую страницу
@@ -1041,21 +1046,21 @@ BOOL PrintDoc(PrintParam_t *P )
         }
         else
         {
-		    errInLoop = TRUE;
+            errInLoop = TRUE;
             ClearDocFromPrintedLineAndBlock( P );
             break;
         }
 
         //-- очистим P.Page...
-		if ( !ClearDocFromPrintedLineAndBlock( P ) )
-		{
-			errInLoop = TRUE;
-			break;
-		}
-	}
+        if ( !ClearDocFromPrintedLineAndBlock( P ) )
+        {
+            errInLoop = TRUE;
+            break;
+        }
+    }
 
     // завершим печать...
-	EndPrint( P );
+    EndPrint( P );
 
     return errInLoop;
 }

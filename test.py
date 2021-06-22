@@ -34,7 +34,9 @@ commands=(#'./nixprint --file=./tst/doctxt01_3.txt --debug',
           #'./nixprint --file=./tst/aobv1.rep --debug -a4 --landscape --out=./tst/0000.pdf',
           #'./nixprint --file=./tst/zplrl.txt --debug -a4 --out=./tst/0000.pdf',
           #'./nixprint --file=./tst/bookp.txt --debug -a4 --out=./tst/0000.pdf',
-          './nixprint --file=./tst/doctxt01_6.txt --debug -a4 --out=./tst/0000.pdf',
+          # './nixprint --file=./tst/doctxt01_6.txt --debug -a4 --out=./tst/0000.pdf',
+          # './nixprint --file=./tst/doctxt01_01_original.txt --debug -a4 --out=./tst/0000.pdf',
+          './nixprint --file=./tst/doctxt01_page_orient.txt --debug -a4 --out=./tst/0000.pdf',
           )
 
 
